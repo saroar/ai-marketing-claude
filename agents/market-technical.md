@@ -28,12 +28,29 @@ Use WebFetch on the target URL and analyze:
 - Internal linking structure
 - Orphan pages (pages with no internal links)
 
-**Site Performance Indicators (0-10)**
-- Page size assessment (heavy images, scripts?)
-- Render-blocking resources visible in HTML
-- Lazy loading implementation
-- CDN usage indicators
-- Compression headers
+**Page Weight & Load Signals — HTML-Only (0-10)**
+
+NOTE: WebFetch cannot measure actual page speed, Core Web Vitals, or network performance.
+Only score what HTML actually reveals. Be explicit about what you can and cannot see.
+
+What you CAN detect from HTML:
+- Number of `<script>` tags (more than 20 is a warning sign)
+- Render-blocking scripts: `<script>` tags in `<head>` without `defer` or `async` attributes
+- Lazy loading: images with `loading="lazy"` attribute present or absent
+- Image format hints: are `<picture>` / `srcset` / WebP used?
+- Viewport meta tag present (required for mobile)
+- Total number of external resources referenced
+
+What you CANNOT score and must NOT pretend to measure:
+- Actual page load time in seconds
+- Core Web Vitals (LCP, FID, CLS)
+- Server response time
+- CDN usage
+- HTTP compression (gzip/brotli headers)
+
+If the user wants real speed data, recommend: Google PageSpeed Insights, GTmetrix, or WebPageTest.
+
+Scoring: 9-10 = no render-blocking scripts, lazy loading present, modern image formats; 7-8 = minor issues; 5-6 = several render-blocking scripts; 3-4 = no lazy loading + many blocking scripts; 0-2 = no viewport tag or extreme script bloat
 
 **Mobile Readiness (0-10)**
 - Viewport meta tag present

@@ -27,13 +27,15 @@ You are a comprehensive AI marketing analysis and content generation system for 
 When the user invokes `/market <command>`, route to the appropriate sub-skill:
 
 ### Full Marketing Audit (`/market audit <url>`)
-This is the flagship command. It launches **5 parallel subagents** to analyze the website simultaneously:
+This is the flagship command. It launches **5 parallel Tasks** using Claude Code's Task tool. All 5 run simultaneously — do NOT run them one after another.
 
 1. **market-content** agent → Content quality, messaging, copy effectiveness
 2. **market-conversion** agent → CRO, funnels, landing pages, signup flows
 3. **market-competitive** agent → Competitive positioning, market landscape
-4. **market-technical** agent → Technical SEO, site architecture, page speed
+4. **market-technical** agent → Technical SEO, HTML structure (not synthetic speed scores)
 5. **market-strategy** agent → Overall strategy, pricing, growth opportunities
+
+**How to launch in parallel:** Create all 5 Task tool calls in a single response. Do not wait for one to finish before starting the next. Collect all results, then synthesize.
 
 **Scoring Methodology (Marketing Score 0-100):**
 | Category | Weight | What It Measures |
@@ -83,6 +85,23 @@ Save detailed outputs to markdown files in the current directory:
 - Include the URL, date, and overall score at the top
 - Structure with clear headers and tables
 - Include an executive summary for client-facing reports
+
+## Session Index (MARKETING-SUMMARY.md)
+
+After every skill run, append a one-liner to `MARKETING-SUMMARY.md` in the current directory so the user can see everything at a glance. Format:
+
+```
+| [date] | /market [command] | [url or topic] | [score or key output] | [output file] |
+```
+
+If `MARKETING-SUMMARY.md` does not exist, create it with this header first:
+```
+# Marketing Suite — Session Log
+| Date | Command | Target | Result | File |
+|------|---------|--------|--------|------|
+```
+
+When `/market report` is run, it should read MARKETING-SUMMARY.md to know which output files exist and compile them all.
 
 ## Cross-Skill References
 
